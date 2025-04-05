@@ -10,10 +10,31 @@ const Recommendations = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const fetchRecommendations = async () => {
+    try {
+      setLoading(true);
+      const response = await careerService.getRecommendations();
+      setRecommendations(response.data.recommendations);
+      setError('');
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || 'Failed to load recommendations';
+      setError(errorMessage);
+      
+      // If user needs to update profile first
+      if (errorMessage.includes('update your profile')) {
+        setTimeout(() => {
+          navigate('/profile');
+        }, 3000);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
     fetchRecommendations();
-  }, []);
+  }, [navigate]);
 
-  const fetchRecommendations = async () => {
+  // Define this function outside useEffect for the button click
+  const handleRefresh = async () => {
     try {
       setLoading(true);
       const response = await careerService.getRecommendations();
@@ -57,7 +78,7 @@ const Recommendations = () => {
         </div>
       )}
       
-      <button onClick={fetchRecommendations} className="refresh-button">
+      <button onClick={handleRefresh} className="refresh-button">
         Refresh Recommendations
       </button>
     </div>
