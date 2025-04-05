@@ -1,6 +1,6 @@
 // src/components/Auth/Login.jsx
 import React, { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import { authService } from '../../services/api';
 
@@ -76,7 +76,7 @@ const Login = () => {
         </button>
       </form>
       <p>
-        Don't have an account? <a href="/register">Register</a>
+        Don't have an account? <Link to="/register">Register</Link>
       </p>
     </div>
   );
